@@ -1,41 +1,14 @@
 <template>
 <div class="home">
-  <div class="navbar">
-    <span class="icon">
-        <font-awesome-icon :icon="['fa', 'fa-bars']"/>
-    </span>
-    <div class="logoName">HandsUp</div>
-    <span class="icon">
-        <font-awesome-icon :icon="['fa', 'fa-sign-out']"/>
-    </span>
-  </div>
+  <Navbar/>
   <div class="container">
     <div class="main">
       <h1>Todo List</h1>
       <div class="list">
-        <div class="list-item" v-for="task in tasks" :key="task.id" :class="{'active':task.done}">
-          <div class="list-item-checkbox" @click="doneStatus(task.id)">
-            <span class="icon" v-if="task.done">
-                <font-awesome-icon :icon="['fa', 'fa-check']"/>
-            </span>
-          </div>
-          <div class="list-item-text">{{task.text}}</div>
-          <div class="list-item-trash" @click="deleteTask(task.id)">
-            <font-awesome-icon :icon="['fa', 'fa-trash']"/>
-          </div>
-        </div>
+        <ListItem v-for="task in tasks" 
+        :task="task" :key="task.id" @doneStatus="doneStatus" @deleteTask="deleteTask"/>
       </div>
-      <div class="addItem">
-        <div class="addItem-input">
-          <input type="text" placeholder="請輸入要做的事情" v-model="newTask" @keyup.enter="addNewTasks"/>
-        </div>
-        <span class="icon" @click="addNewTasks">
-            <font-awesome-icon :icon="['fa', 'fa-plus-square']"/>
-        </span>
-        <span class="icon" @click="addNewTasks">
-            <i class="fa-solid fa-spinner fa-spin-pulse fa-spin-reverse"></i>
-        </span>
-      </div>
+      <AddItem @addNewTasks="addNewTasks"/>
     </div>
   </div>
   <LoaderImg :loadingStatus="loadingStatus"/>
@@ -59,15 +32,15 @@ export default {
   },
   methods:{
     ...mapMutations(["pushNewTasks","deleteTasks","doneStatus"]),
-    addNewTasks(){
-      if(this.newTask === ""){
+    addNewTasks(newTask){
+      if(newTask === ""){
         return
       }
       this.loadingStatus = true;
       let newItem ={
         "id":v4(),
         "done":false,
-        "text":this.newTask
+        "text":newTask
       }
       let asyncAdd = () => {
         let vm = this;
@@ -79,7 +52,6 @@ export default {
         })
       };
       asyncAdd().then(()=>{
-        this.newTask = ''
         this.loadingStatus = false;
       })
     },
