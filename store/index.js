@@ -28,5 +28,11 @@ export const mutations = {
     state.tasks = state.tasks.filter((e)=>{
       return e.id !== id
     })
+  },
+  doneStatus(state,id){
+    let item = state.tasks.find((e)=>{
+      return e.id === id
+    })
+    item.done = !item.done
   }
 }

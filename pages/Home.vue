@@ -14,7 +14,7 @@
       <h1>Todo List</h1>
       <div class="list">
         <div class="list-item" v-for="task in tasks" :key="task.id" :class="{'active':task.done}">
-          <div class="list-item-checkbox">
+          <div class="list-item-checkbox" @click="doneStatus(task.id)">
             <span class="icon" v-if="task.done">
                 <font-awesome-icon :icon="['fa', 'fa-check']"/>
             </span>
@@ -24,17 +24,6 @@
             <font-awesome-icon :icon="['fa', 'fa-trash']"/>
           </div>
         </div>
-       <!-- <div class="list-item active">
-          <div class="list-item-checkbox">
-            <span class="icon">
-                <font-awesome-icon :icon="['fa', 'fa-check']"/>
-            </span>
-          </div>
-          <div class="list-item-text">代辦事項</div>
-          <div class="list-item-trash">
-            <font-awesome-icon :icon="['fa', 'fa-trash']"/>
-          </div>
-        </div>  -->
       </div>
       <div class="addItem">
         <div class="addItem-input">
@@ -64,7 +53,7 @@ export default {
     ...mapState(["tasks"])
   },
   methods:{
-    ...mapMutations(["pushNewTasks","deleteTasks"]),
+    ...mapMutations(["pushNewTasks","deleteTasks","doneStatus"]),
     addNewTasks(){
       let newItem ={
         "id":v4(),
