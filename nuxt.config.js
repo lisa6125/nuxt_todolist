@@ -25,6 +25,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    {
+    src: '~/plugins/font-awesome'
+  }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -36,8 +39,19 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'nuxt-fontawesome',
   ],
-
+  fontawesome: {
+      // icon 的標籤使用 ，這邊不設定就會依照 plugin 裡的設定
+      component: 'fa', 
+      imports: [
+        // 引入 fas 所有的icon
+        {
+          set: '@fortawesome/free-solid-svg-icons',
+          icons: ['fas']
+        },
+      ]
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   }
