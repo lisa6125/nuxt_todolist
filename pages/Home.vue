@@ -20,7 +20,7 @@
             </span>
           </div>
           <div class="list-item-text">{{task.text}}</div>
-          <div class="list-item-trash">
+          <div class="list-item-trash" @click="deleteTasks(task.id)">
             <font-awesome-icon :icon="['fa', 'fa-trash']"/>
           </div>
         </div>
@@ -64,7 +64,7 @@ export default {
     ...mapState(["tasks"])
   },
   methods:{
-    ...mapMutations(["pushNewTasks"]),
+    ...mapMutations(["pushNewTasks","deleteTasks"]),
     addNewTasks(){
       let newItem ={
         "id":v4(),

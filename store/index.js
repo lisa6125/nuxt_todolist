@@ -24,4 +24,9 @@ export const mutations = {
   pushNewTasks(state,task) {
     state.tasks.unshift(task)
   },
+  deleteTasks(state,id){
+    state.tasks = state.tasks.filter((e)=>{
+      return e.id !== id
+    })
+  }
 }
