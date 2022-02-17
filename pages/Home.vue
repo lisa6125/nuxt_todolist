@@ -20,21 +20,25 @@
             </span>
           </div>
           <div class="list-item-text">{{task.text}}</div>
-          <div class="list-item-trash" @click="deleteTasks(task.id)">
+          <div class="list-item-trash" @click="deleteTask(task.id)">
             <font-awesome-icon :icon="['fa', 'fa-trash']"/>
           </div>
         </div>
       </div>
       <div class="addItem">
         <div class="addItem-input">
-          <input type="text" placeholder="請輸入要做的事情" v-model="newTask"/>
+          <input type="text" placeholder="請輸入要做的事情" v-model="newTask" @keyup.enter="addNewTasks"/>
         </div>
         <span class="icon" @click="addNewTasks">
             <font-awesome-icon :icon="['fa', 'fa-plus-square']"/>
         </span>
+        <span class="icon" @click="addNewTasks">
+            <i class="fa-solid fa-spinner fa-spin-pulse fa-spin-reverse"></i>
+        </span>
       </div>
     </div>
   </div>
+  <LoaderImg :loadingStatus="loadingStatus"/>
 </div>
 
 </template>
@@ -47,6 +51,7 @@ export default {
   data(){
     return{
       newTask:'',
+      loadingStatus:false,
     }
   },
   computed:{
@@ -55,13 +60,44 @@ export default {
   methods:{
     ...mapMutations(["pushNewTasks","deleteTasks","doneStatus"]),
     addNewTasks(){
+      if(this.newTask === ""){
+        return
+      }
+      this.loadingStatus = true;
       let newItem ={
         "id":v4(),
         "done":false,
         "text":this.newTask
       }
-      this.pushNewTasks(newItem)
-      this.newTask = ''
+      let asyncAdd = () => {
+        let vm = this;
+        return new Promise(function (resolve, reject) {
+          setTimeout(() => {
+            vm.pushNewTasks(newItem);
+            resolve('success')
+          }, 1000);
+        })
+      };
+      asyncAdd().then(()=>{
+        this.newTask = ''
+        this.loadingStatus = false;
+      })
+    },
+    deleteTask(id){
+      this.loadingStatus = true;
+
+      let asyncDel = () => {
+        let vm = this;
+        return new Promise(function (resolve, reject) {
+          setTimeout(() => {
+            vm.deleteTasks(id);
+            resolve('success')
+          }, 1000);
+        })
+      };
+      asyncDel().then(()=>{
+        this.loadingStatus = false;
+      })
     }
   }
 }
