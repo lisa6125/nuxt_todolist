@@ -21,4 +21,7 @@ export const state = () => ({
 })
 
 export const mutations = {
+  pushNewTasks(state,task) {
+    state.tasks.unshift(task)
+  },
 }

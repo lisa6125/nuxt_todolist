@@ -38,9 +38,9 @@
       </div>
       <div class="addItem">
         <div class="addItem-input">
-          <input type="text" placeholder="請輸入要做的事情"/>
+          <input type="text" placeholder="請輸入要做的事情" v-model="newTask"/>
         </div>
-        <span class="icon">
+        <span class="icon" @click="addNewTasks">
             <font-awesome-icon :icon="['fa', 'fa-plus-square']"/>
         </span>
       </div>
@@ -51,11 +51,29 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState,mapMutations} from "vuex";
+import {v4} from 'uuid';
 export default {
   name: 'Home',
+  data(){
+    return{
+      newTask:'',
+    }
+  },
   computed:{
     ...mapState(["tasks"])
+  },
+  methods:{
+    ...mapMutations(["pushNewTasks"]),
+    addNewTasks(){
+      let newItem ={
+        "id":v4(),
+        "done":false,
+        "text":this.newTask
+      }
+      this.pushNewTasks(newItem)
+      this.newTask = ''
+    }
   }
 }
 </script>
