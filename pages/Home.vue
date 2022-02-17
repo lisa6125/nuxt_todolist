@@ -13,14 +13,18 @@
     <div class="main">
       <h1>Todo List</h1>
       <div class="list">
-        <div class="list-item">
-          <div class="list-item-checkbox"></div>
-          <div class="list-item-text">代辦事項1</div>
+        <div class="list-item" v-for="task in tasks" :key="task.id" :class="{'active':task.done}">
+          <div class="list-item-checkbox">
+            <span class="icon" v-if="task.done">
+                <font-awesome-icon :icon="['fa', 'fa-check']"/>
+            </span>
+          </div>
+          <div class="list-item-text">{{task.text}}</div>
           <div class="list-item-trash">
             <font-awesome-icon :icon="['fa', 'fa-trash']"/>
           </div>
         </div>
-        <div class="list-item active">
+       <!-- <div class="list-item active">
           <div class="list-item-checkbox">
             <span class="icon">
                 <font-awesome-icon :icon="['fa', 'fa-check']"/>
@@ -30,7 +34,7 @@
           <div class="list-item-trash">
             <font-awesome-icon :icon="['fa', 'fa-trash']"/>
           </div>
-        </div>
+        </div>  -->
       </div>
       <div class="addItem">
         <div class="addItem-input">
@@ -47,8 +51,12 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
 export default {
-  name: 'Home'
+  name: 'Home',
+  computed:{
+    ...mapState(["tasks"])
+  }
 }
 </script>
 <style lang="scss">
@@ -158,6 +166,7 @@ export default {
         font-size: 36px;
         color:#8DC8FF;
         margin-left:25px;
+        cursor:pointer;
       }
     }
   }
