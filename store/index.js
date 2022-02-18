@@ -17,7 +17,9 @@ export const state = () => ({
     "id":4,
     "done":false,
     "text":"睡覺"},
-    ]
+    ],
+  locale: "en",
+  locales: ["en", "zh"]
 })
 
 export const mutations = {
@@ -34,5 +36,5 @@ export const mutations = {
       return e.id === id
     })
     item.done = !item.done
-  }
+  },
 }

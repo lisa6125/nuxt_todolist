@@ -26,7 +26,7 @@ export default {
   plugins: [
     {
     src: '~/plugins/font-awesome'
-  }
+  },"~/plugins/i18n.js"
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -3,12 +3,13 @@
   <Navbar/>
   <div class="container">
     <div class="main">
-      <h1>Todo List</h1>
+      <h1>{{ title }}</h1>
+      <p @click="changeLanguage()"><font-awesome-icon icon="fa-solid fa-language" /></p>
       <div class="list">
         <ListItem v-for="task in tasks" 
         :task="task" :key="task.id" @doneStatus="doneStatus" @deleteTask="deleteTask"/>
       </div>
-      <AddItem @addNewTasks="addNewTasks"/>
+      <AddItem @addNewTasks="addNewTasks" :placeHolder="placeHolder"/>
     </div>
   </div>
   <LoaderImg :loadingStatus="loadingStatus"/>
@@ -28,7 +29,13 @@ export default {
     }
   },
   computed:{
-    ...mapState(["tasks"])
+    ...mapState(["tasks"]),
+      title() {
+        return this.$t("title");
+      },
+      placeHolder(){
+        return this.$t("placeHolder");
+      }
   },
   methods:{
     ...mapMutations(["pushNewTasks","deleteTasks","doneStatus"]),
@@ -70,12 +77,24 @@ export default {
       asyncDel().then(()=>{
         this.loadingStatus = false;
       })
+    },
+    changeLanguage() {
+      let noeLang = this.$i18n.locale;
+      if(noeLang === 'zh'){
+        this.$i18n.locale = 'en'
+      }else{
+        this.$i18n.locale = 'zh'
+      }
     }
   }
 }
 </script>
 <style lang="scss">
 @import '../assets/main.scss';
+$primary-color:#8DC8FF;
+$second-color:#C7C3C6;
+$font-lg:36px;
+
 .navbar{
   width: 100%;
   height: 55px;
@@ -83,9 +102,9 @@ export default {
   z-index:99;
   top:0;
   left:0;
-  background-color: #8DC8FF;
+  background-color: $primary-color;
   color:#fff;
-  font-size: 36px;
+  font-size: $font-lg;
   display:flex;
   align-items:center;
   .icon{
@@ -111,8 +130,13 @@ export default {
     background-color:#fff;
     position:relative;
     h1{
-      font-size:36px;
+      font-size:$font-lg;
       font-weight:700;
+      +p{
+        cursor:pointer;
+        font-size:24px;
+        color:$second-color;
+      }
     }
     .list{
       padding:30px;
@@ -124,7 +148,7 @@ export default {
         &-checkbox{
           width:20px;
           height:20px;
-          border:1px solid  #C7C3C6;
+          border:1px solid $second-color;
           margin-right:32px;
           cursor:pointer;
         }
@@ -140,16 +164,16 @@ export default {
         }
         &.active{
           .list-item-checkbox{
-            border:1px solid #8DC8FF;
+            border:1px solid $primary-color;
             display:flex;
             justify-content:center;
             align-items:center;
             .icon{
-              color:#8DC8FF;
+              color:$primary-color;
             }
           }
           .list-item-text{
-            color:#8DC8FF;
+            color:$primary-color;
           }
         }
       }
@@ -169,17 +193,17 @@ export default {
           width:100%;
           height:34px;
           box-sizing:border-box;
-          border: 1px solid #C7C3C6;
+          border: 1px solid $second-color;
           border-radius: 4px;
           padding:5px;
           &:focus{
-            outline: 1px solid #C7C3C6;
+            outline: 1px solid $second-color;
           }
         }
       }
       .icon{
-        font-size: 36px;
-        color:#8DC8FF;
+        font-size: $font-lg;
+        color:$primary-color;
         margin-left:25px;
         cursor:pointer;
       }

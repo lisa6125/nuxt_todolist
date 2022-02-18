@@ -2,7 +2,7 @@
 <template>
   <div class="addItem">
     <div class="addItem-input">
-      <input type="text" placeholder="請輸入要做的事情" v-model="newTask" @keyup.enter="addNewTasks"/>
+      <input type="text" :placeholder="placeHolder" v-model="newTask" @keyup.enter="addNewTasks"/>
     </div>
     <span class="icon" @click="addNewTasks">
         <font-awesome-icon :icon="['fa', 'fa-plus-square']"/>
@@ -13,6 +13,7 @@
 <script>
 export default {
   name: 'AddItem',
+  props:["placeHolder"],
   data(){
     return {
       newTask:''
