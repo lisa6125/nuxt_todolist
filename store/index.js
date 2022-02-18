@@ -23,8 +23,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  pushNewTasks(state,task) {
-    state.tasks.unshift(task)
+  pushNewTasks(state,tasks) {
+    state.tasks = tasks.slice()
   },
   deleteTasks(state,id){
     state.tasks = state.tasks.filter((e)=>{

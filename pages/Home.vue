@@ -6,8 +6,10 @@
       <h1>{{ title }}</h1>
       <p @click="changeLanguage()"><font-awesome-icon icon="fa-solid fa-language" /></p>
       <div class="list">
-        <ListItem v-for="task in tasks" 
-        :task="task" :key="task.id" @doneStatus="doneStatus" @deleteTask="deleteTask"/>
+        <draggable :list="tasks" ghostClass="on-drag" animation="400">
+          <ListItem v-for="task in tasks" 
+          :task="task" :key="task.id" @doneStatus="doneStatus" @deleteTask="deleteTask"/>
+        </draggable>
       </div>
       <AddItem @addNewTasks="addNewTasks" :placeHolder="placeHolder"/>
     </div>
@@ -18,18 +20,21 @@
 </template>
 
 <script>
-import {mapState,mapMutations} from "vuex";
+import {mapMutations} from "vuex";
 import {v4} from 'uuid';
+import draggable from "vuedraggable";
 export default {
   name: 'Home',
   data(){
     return{
       newTask:'',
       loadingStatus:false,
+      tasks:[]
     }
   },
+  components:{draggable},
   computed:{
-    ...mapState(["tasks"]),
+    // ...mapState(["tasks"]),
       title() {
         return this.$t("title");
       },
@@ -49,11 +54,12 @@ export default {
         "done":false,
         "text":newTask
       }
+      this.tasks.unshift(newItem)
       let asyncAdd = () => {
         let vm = this;
         return new Promise(function (resolve, reject) {
           setTimeout(() => {
-            vm.pushNewTasks(newItem);
+            vm.pushNewTasks(vm.tasks);
             resolve('success')
           }, 1000);
         })
@@ -69,12 +75,14 @@ export default {
         let vm = this;
         return new Promise(function (resolve, reject) {
           setTimeout(() => {
+            vm.pushNewTasks(vm.tasks);
             vm.deleteTasks(id);
             resolve('success')
           }, 1000);
         })
       };
       asyncDel().then(()=>{
+        this.getVuexState()
         this.loadingStatus = false;
       })
     },
@@ -85,7 +93,13 @@ export default {
       }else{
         this.$i18n.locale = 'zh'
       }
+    },
+    getVuexState(){
+      this.tasks = this.$store.state.tasks.slice();
     }
+  },
+  mounted(){
+    this.getVuexState()
   }
 }
 </script>
@@ -134,6 +148,7 @@ $font-lg:36px;
       font-weight:700;
       +p{
         cursor:pointer;
+        width:30px;
         font-size:24px;
         color:$second-color;
       }
@@ -144,7 +159,8 @@ $font-lg:36px;
       &-item{
         display:flex;
         align-items:center;
-        margin-bottom:30px;
+        margin-bottom:10px;
+        padding:20px;
         &-checkbox{
           width:20px;
           height:20px;
@@ -209,5 +225,9 @@ $font-lg:36px;
       }
     }
   }
+}
+.on-drag{
+  background-color:#ddf3f2;
+  color:#fff;
 }
 </style>
